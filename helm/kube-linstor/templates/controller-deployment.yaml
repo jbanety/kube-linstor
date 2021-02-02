@@ -45,7 +45,9 @@ spec:
           keytool -importcert -noprompt -deststorepass linstor -keypass linstor -file /tls/satellite/tls.crt -alias linstor-satellite -destkeystore /config/ssl/certificates.jks
           {{- end }}
           rm -f "$tmp"
-        imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+          {{- if .Values.controller.db.tls }}
+          cp -rf /tls/db /config/ssl/db
+          {{- end }}
         volumeMounts:
         - name: config
           mountPath: /config
@@ -62,6 +64,10 @@ spec:
         {{- if .Values.satellite.ssl.enabled }}
         - name: satellite-tls
           mountPath: /tls/satellite
+        {{- end }}
+        {{- if .Values.controller.db.tls }}
+        - name: db-tls
+          mountPath: /tls/db
         {{- end }}
       {{- end }}
       {{- if .Values.controller.initSettings.enabled }}
@@ -192,5 +198,10 @@ spec:
       - name: satellite-tls
         secret:
           secretName: {{ $fullName }}-satellite-tls
+      {{- end }}
+      {{- if .Values.controller.db.tls }}
+      - name: db-tls
+        secret:
+          secretName: {{ $fullName }}-db-tls
       {{- end }}
 {{- end }}
