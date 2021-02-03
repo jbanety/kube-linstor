@@ -32,9 +32,9 @@ Generates linstor.toml config file
   password = "{{ .Values.controller.db.password }}"
   connection_url = "{{ .Values.controller.db.connectionUrl }}"
 {{- if .Values.controller.db.tls }}
-  ca_certificate = "/config/ssl/db/ca.crt"
-  client_certificate = "/config/ssl/db/tls.crt"
-  client_key_pkcs8_pem = "/config/ssl/db/tls.key"
+  ca_certificate = "/tls/db/ca.crt"
+  client_certificate = "/tls/db/tls.crt"
+  client_key_pkcs8_pem = "/tls/db/tls.key"
 {{- end }}
 {{- if .Values.controller.db.etcdPrefix }}
   [db.etcd]
